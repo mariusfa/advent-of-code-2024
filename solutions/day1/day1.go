@@ -18,6 +18,25 @@ func Solve() {
 	left, right, err := parseData(content)
 	distance := calcDistance(left, right)
 	fmt.Printf("Distance: %d\n", distance)
+
+	similarity := calcSimilarity(left, right)
+	fmt.Printf("Similarity: %d\n", similarity)
+}
+
+func calcSimilarity(left []int, right []int) int {
+	similarity := 0
+
+	for i := 0; i < len(left); i++ {
+		leftValue := left[i]
+		ValueCount := 0
+		for j := 0; j < len(right); j++ {
+			if leftValue == right[j] {
+				ValueCount++
+			}
+		}
+		similarity += (ValueCount * leftValue)
+	}
+	return similarity
 }
 
 func calcDistance(left []int, right []int) int {

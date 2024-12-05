@@ -2,13 +2,22 @@ package day1
 
 import "testing"
 
-func TestDay1(t *testing.T) {
+func TestDay1Distance(t *testing.T) {
 	leftList := []int{3, 4, 2, 1, 3, 3}
 	rightList := []int{4, 3, 5, 3, 9, 3}
 
 	distance := calcDistance(leftList, rightList)
 	if distance != 11 {
 		t.Errorf("Expected 11, got %d", distance)
+	}
+}
+
+func TestDay1Similarity(t *testing.T) {
+	leftList := []int{3, 4, 2, 1, 3, 3}
+	rightList := []int{4, 3, 5, 3, 9, 3}
+	similarity := calcSimilarity(leftList, rightList)
+	if similarity != 31 {
+		t.Errorf("Expected 31, got %d", similarity)
 	}
 }
 
