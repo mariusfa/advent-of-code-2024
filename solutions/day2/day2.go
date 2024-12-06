@@ -1,15 +1,39 @@
 package day2
 
-// testdata
-// 7 6 4 2 1
-// 1 2 7 8 9
-// 9 7 6 2 1
-// 8 6 4 4 1
-// 1 3 2 4 5
-// 1 3 6 7 9
+import (
+	"advent/utils"
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 func Solve() {
-	// TODO: Implement
+	filename := "solutions/day2/data.txt"
+	content, err := utils.ReadData(filename)
+	if err != nil {
+		panic(err)
+	}
+	reports := parseReports(content)
+	safeReports := getSafeReports(reports)
+	fmt.Printf("Safe reports: %d\n", safeReports)
+}
+
+func parseReports(content string) [][]int {
+	reports := [][]int{}
+	lines := strings.Split(content, "\n")
+	for _, line := range lines {
+		if line == "" {
+			continue
+		}
+		report := []int{}
+		values := strings.Split(line, " ")
+		for _, value := range values {
+			intValue, _ := strconv.Atoi(value)
+			report = append(report, intValue)
+		}
+		reports = append(reports, report)
+	}
+	return reports
 }
 
 func getSafeReports(reports [][]int) int {
@@ -19,34 +43,28 @@ func getSafeReports(reports [][]int) int {
 		isReportIncreasing := false
 
 		if report[0] == report[1] {
-			println("unsafe")
 			continue
 		}
 
 		if report[0] < report[1] {
-			println("increasing")
 			isReportIncreasing = true
 		} else {
-			println("decresing")
 			isReportIncreasing = false
 		}
 
 		isSafe := true
 		for index, value := range report {
-			println("value", value)
-			println("pastValue", pastValue)
 			if index == 0 {
 				pastValue = value
 				continue
 			}
 			if isReportIncreasing {
-				if value-pastValue < 1 && value-pastValue > 3 {
+				if !isTwoValuesWithinValidRange(pastValue, value) {
 					isSafe = false
 					break
 				}
 			} else {
-				println("value-pastValue", pastValue-value)
-				if pastValue-value < 1 && pastValue-value > 3 {
+				if !isTwoValuesWithinValidRange(value, pastValue) {
 					isSafe = false
 					break
 				}
@@ -54,10 +72,16 @@ func getSafeReports(reports [][]int) int {
 			pastValue = value
 		}
 		if isSafe {
-			println("safe")
 			safeCount++
 		}
 	}
 
 	return safeCount
+}
+
+func isTwoValuesWithinValidRange(low int, high int) bool {
+	if high-low < 1 || high-low > 3 {
+		return false
+	}
+	return true
 }
